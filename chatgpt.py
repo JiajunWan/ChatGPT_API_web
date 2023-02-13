@@ -1,4 +1,5 @@
 from flask import Flask, request
+import os, openai
 
 app = Flask(__name__)
 
@@ -11,7 +12,17 @@ def index():
         # response = requests.get("https://example.com/api/search?q=" + input_text)
         # result = response.text
 
-        result = "Example response"
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=input_text,
+            temperature=0,
+            max_tokens=3000
+        )
+
+        print(response.choices[0].text)
+        result = response.choices[0].text
 
         return result
     return """
